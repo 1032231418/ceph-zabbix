@@ -195,6 +195,9 @@ function ceph_mon_get_active()
 
 # Return the value
 case $1 in
+  health_detail)
+    $ceph_bin health detail
+  ;;
   health)
     status=$($ceph_bin health | awk '{print $1}')
     case $status in
