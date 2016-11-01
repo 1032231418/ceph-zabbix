@@ -193,6 +193,8 @@ function ceph_mon_get_active()
   fi
 }
 
+function ceph_get()
+{
 # Return the value
 case $1 in
   health)
@@ -299,4 +301,40 @@ case $1 in
   rdbps)
     echo $rdbps
   ;;
-esac
+}
+
+function get_kv()
+{
+	echo - ceph.health $($(ceph_get health) 
+	echo - ceph.count $(ceph_get count) 
+	echo - ceph.osd_in $(ceph_get in) 
+	echo - ceph.osd_up $(ceph_get up) 
+	echo - ceph.active $(ceph_get active) 
+	echo - ceph.backfill $(ceph_get backfill) 
+	echo - ceph.clean $(ceph_get clean) 
+	echo - ceph.creating $(ceph_get creating) 
+	echo - ceph.degraded $(ceph_get degraded) 
+	echo - ceph.degraded_percent $(ceph_get degraded_percent) 
+	echo - ceph.down $(ceph_get down) 
+	echo - ceph.incomplete $(ceph_get incomplete) 
+	echo - ceph.inconsistent $(ceph_get inconsistent) 
+	echo - ceph.peering $(ceph_get peering) 
+	echo - ceph.recovering $(ceph_get recovering) 
+	echo - ceph.remapped $(ceph_get remapped) 
+	echo - ceph.repair $(ceph_get repair) 
+	echo - ceph.replay $(ceph_get replay) 
+	echo - ceph.scrubbing $(ceph_get scrubbing) 
+	echo - ceph.splitting $(ceph_get splitting) 
+	echo - ceph.stale $(ceph_get stale) 
+	echo - ceph.pgtotal $(ceph_get pgtotal) 
+	echo - ceph.waitBackfill $(ceph_get waitBackfill) 
+	echo - ceph.mon $(ceph_get mon) 
+	echo - ceph.rados_total $(ceph_get rados_total) 
+	echo - ceph.rados_used $(ceph_get rados_used) 
+	echo - ceph.rados_free $(ceph_get rados_free) 
+	echo - ceph.wrbps $(ceph_get wrbps) 
+	echo - ceph.rdbps $(ceph_get rdbps) 
+	echo - ceph.ops $(ceph_get ops) 
+}
+echo $(get_kv) >kv.txt
+zabbix_sender --zabbix-server $1 --host $2 --input-file kv.txt
