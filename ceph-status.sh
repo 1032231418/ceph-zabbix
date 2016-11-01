@@ -2,6 +2,8 @@
 
 ceph_bin="/usr/bin/ceph"
 rados_bin="/usr/bin/rados"
+zabbix_sender_bin="/usr/bin/zabbix_sender"
+
 
 # Initialising variables
 # See: http://ceph.com/docs/master/rados/operations/pg-states/
@@ -305,36 +307,38 @@ case $1 in
 
 function get_kv()
 {
-	echo - ceph.health $($(ceph_get health) 
-	echo - ceph.count $(ceph_get count) 
-	echo - ceph.osd_in $(ceph_get in) 
-	echo - ceph.osd_up $(ceph_get up) 
-	echo - ceph.active $(ceph_get active) 
-	echo - ceph.backfill $(ceph_get backfill) 
-	echo - ceph.clean $(ceph_get clean) 
-	echo - ceph.creating $(ceph_get creating) 
-	echo - ceph.degraded $(ceph_get degraded) 
-	echo - ceph.degraded_percent $(ceph_get degraded_percent) 
-	echo - ceph.down $(ceph_get down) 
-	echo - ceph.incomplete $(ceph_get incomplete) 
-	echo - ceph.inconsistent $(ceph_get inconsistent) 
-	echo - ceph.peering $(ceph_get peering) 
-	echo - ceph.recovering $(ceph_get recovering) 
-	echo - ceph.remapped $(ceph_get remapped) 
-	echo - ceph.repair $(ceph_get repair) 
-	echo - ceph.replay $(ceph_get replay) 
-	echo - ceph.scrubbing $(ceph_get scrubbing) 
-	echo - ceph.splitting $(ceph_get splitting) 
-	echo - ceph.stale $(ceph_get stale) 
-	echo - ceph.pgtotal $(ceph_get pgtotal) 
-	echo - ceph.waitBackfill $(ceph_get waitBackfill) 
-	echo - ceph.mon $(ceph_get mon) 
-	echo - ceph.rados_total $(ceph_get rados_total) 
-	echo - ceph.rados_used $(ceph_get rados_used) 
-	echo - ceph.rados_free $(ceph_get rados_free) 
-	echo - ceph.wrbps $(ceph_get wrbps) 
-	echo - ceph.rdbps $(ceph_get rdbps) 
+	echo - ceph.health $(ceph_get health) \\n 
+	echo - ceph.count $(ceph_get count) \\n 
+	echo - ceph.osd_in $(ceph_get in) \\n
+	echo - ceph.osd_up $(ceph_get up) \\n
+	echo - ceph.active $(ceph_get active) \\n 
+	echo - ceph.backfill $(ceph_get backfill) \\n 
+	echo - ceph.clean $(ceph_get clean) \\n
+	echo - ceph.creating $(ceph_get creating) \\n 
+	echo - ceph.degraded $(ceph_get degraded) \\n
+	echo - ceph.degraded_percent $(ceph_get degraded_percent) \\n 
+	echo - ceph.down $(ceph_get down) \\n
+	echo - ceph.incomplete $(ceph_get incomplete) \\n 
+	echo - ceph.inconsistent $(ceph_get inconsistent) \\n 
+	echo - ceph.peering $(ceph_get peering) \\n
+	echo - ceph.recovering $(ceph_get recovering) \\n 
+	echo - ceph.remapped $(ceph_get remapped) \\n
+	echo - ceph.repair $(ceph_get repair) \\n
+	echo - ceph.replay $(ceph_get replay) \\n
+	echo - ceph.scrubbing $(ceph_get scrubbing) \\n 
+	echo - ceph.splitting $(ceph_get splitting) \\n
+	echo - ceph.stale $(ceph_get stale) \\n
+	echo - ceph.pgtotal $(ceph_get pgtotal) \\n 
+	echo - ceph.waitBackfill $(ceph_get waitBackfill) \\n 
+	echo - ceph.mon $(ceph_get mon) \\n 
+	echo - ceph.rados_total $(ceph_get rados_total) \\n
+	echo - ceph.rados_used $(ceph_get rados_used) \\n
+	echo - ceph.rados_free $(ceph_get rados_free) \\n
+	echo - ceph.wrbps $(ceph_get wrbps) \\n
+	echo - ceph.rdbps $(ceph_get rdbps) \\n 
 	echo - ceph.ops $(ceph_get ops) 
 }
-echo $(get_kv) >kv.txt
-zabbix_sender --zabbix-server $1 --host $2 --input-file kv.txt
+echo -e $(get_kv) >kv.txt
+$zabbix_sender_bin -vv --zabbix-server $1 --host $2 --input-file kv.txt
+echo $?
+
