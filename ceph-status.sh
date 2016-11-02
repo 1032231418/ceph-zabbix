@@ -303,6 +303,7 @@ case $1 in
   rdbps)
     echo $rdbps
   ;;
+  esac
 }
 
 function get_kv()
