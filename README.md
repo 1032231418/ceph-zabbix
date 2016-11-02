@@ -22,7 +22,6 @@ On Zabbix DashBoad:
 
 2. Link the ceph templates to your ZabbixHost
 
-3. Add item ceph.get[$ActiveServerIP, $HOST, 1] in your ZabbixHost
 
 
 How to push many MON hosts ceph data to the ZabbixHost?
