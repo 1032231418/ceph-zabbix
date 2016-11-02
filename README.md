@@ -8,7 +8,7 @@ Installation
 
 1. excute install cmd:
 
-sh install.sh 
+   sh install.sh 
 
 2. import the xml templates.
 
