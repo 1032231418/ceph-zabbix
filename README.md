@@ -7,7 +7,9 @@ Installation
 ===========
 
 copy files :
+
 ceph-status.sh -> /etc/zabbix/scripts/ceph-status.sh 
+
 zabbix_agent_ceph_plugin.conf -> /etc/zabbix/zabbix_agentd.d/zabbix_agent_ceph_plugin.conf
 
 
