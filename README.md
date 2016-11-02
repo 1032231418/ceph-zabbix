@@ -1,24 +1,20 @@
-ceph-zabbix
+ceph-zabbix-active
 ===========
 
-Zabbix plugin for Ceph monitoring
+Zabbix active plugin for Ceph monitoring
 
 Installation
 ===========
 
-copy files :
+1. excute install cmd:
 
-ceph-status.sh -> /etc/zabbix/scripts/ceph-status.sh 
+sh install.sh 
 
-zabbix_agent_ceph_plugin.conf -> /etc/zabbix/zabbix_agentd.d/zabbix_agent_ceph_plugin.conf
+2. import the xml templates.
 
+3. Link the ceph templates to your hosts
 
-
-Add the xml template and link them to your node.
-
-Link the ceph templates to your hosts
-
-Add item in your hosts ceph.get[$ActiveServerIP, $HOST], your can varify the item interval to change the frequncy of collect.
+4. Add item ceph.get[$ActiveServerIP, $HOST] in your hosts  your can varify the item interval to change the frequncy of collect.
 
 
 ==============
