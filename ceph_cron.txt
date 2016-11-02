@@ -1,2 +1,2 @@
 #ceph-status.sh serverActiveIP, ZabbixHost
-* * * * * /etc/zabbix/scripts/ceph-status.sh 10.25.195.3,10.25.195.8
+* * * * * /etc/zabbix/scripts/ceph-status.sh 10.25.195.3 10.25.195.8
