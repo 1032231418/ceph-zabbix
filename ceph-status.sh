@@ -338,7 +338,7 @@ function get_kv()
 	echo - ceph.rdbps $(ceph_get rdbps) \\n 
 	echo - ceph.ops $(ceph_get ops) 
 }
-echo -e $(get_kv) >kv.txt
-$zabbix_sender_bin -vv --zabbix-server $1 --host $2 --input-file kv.txt
+echo -e $(get_kv) >/tmp/zabbix_kv.txt 
+$zabbix_sender_bin -vv --zabbix-server $1 --host $2 --input-file /tmp/zabbix_kv.txt >/dev/null 2>&1
 echo $?
 
