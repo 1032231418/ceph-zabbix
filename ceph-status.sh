@@ -373,6 +373,7 @@ function get_kv()
 	echo - ceph.wops $(ceph_get wops) 
 	
 }
+sleep $(echo $RANDOM%50|bc)
 echo -e $(get_kv) >/tmp/zabbix_kv.txt 
 $zabbix_sender_bin -vv --zabbix-server $1 --host $2 --input-file /tmp/zabbix_kv.txt >/dev/null 2>&1
 echo $?
