@@ -1,8 +1,13 @@
 ===========
 主要改进：
+
 1. 采用 zabbix-agent(active) 模式，效率更高
+
 2. 采集脚本多机部署，数据发送到同一HOST，避免单点风险
-3. 增加支持 read/write iops item
+
+3. 增加支持 read/write iops item；
+
+4. 增加iops超高和ceph err告警
 
 ===========
 
