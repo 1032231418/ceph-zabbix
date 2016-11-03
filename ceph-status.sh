@@ -41,26 +41,47 @@ then
   pgunfound=0
 fi
 
+
+clientio=$($ceph_bin -s |grep "client io")
+# read  kbps B/s
+rdbps=$(echo $clientio | sed -n '/client/s/.* \([0-9]* .\?\)B\/s rd.*/\1/p' | sed -e "s/K/*1000/ig;s/M/*1000*1000/i;s/G/*1000*1000*1000/i;s/E/*1000*1000*1000*1000/i" | bc)
 # write kbps B/s
-rdbps=$(echo $pginfo | sed -n '/pgmap/s/.* \([0-9]* .\?\)B\/s rd.*/\1/p' | sed -e "s/K/*1000/ig;s/M/*1000*1000/i;s/G/*1000*1000*1000/i;s/E/*1000*1000*1000*1000/i" | bc)
+wrbps=$(echo $clientio | sed -n '/client/s/.* \([0-9]* .\?\)B\/s wr.*/\1/p' | sed -e "s/K/*1000/ig;s/M/*1000*1000/i;s/G/*1000*1000*1000/i;s/E/*1000*1000*1000*1000/i" | bc)
+# read  kbps B/s
+#rdbps=$(echo $pginfo | sed -n '/pgmap/s/.* \([0-9]* .\?\)B\/s rd.*/\1/p' | sed -e "s/K/*1000/ig;s/M/*1000*1000/i;s/G/*1000*1000*1000/i;s/E/*1000*1000*1000*1000/i" | bc)
 if [[ "$rdbps" == "" ]]
 then
   rdbps=0
 fi
 
 # write kbps B/s
-wrbps=$(echo $pginfo | sed -n '/pgmap/s/.* \([0-9]* .\?\)B\/s wr.*/\1/p' | sed -e "s/K/*1000/ig;s/M/*1000*1000/i;s/G/*1000*1000*1000/i;s/E/*1000*1000*1000*1000/i" | bc)
+#wrbps=$(echo $pginfo | sed -n '/pgmap/s/.* \([0-9]* .\?\)B\/s wr.*/\1/p' | sed -e "s/K/*1000/ig;s/M/*1000*1000/i;s/G/*1000*1000*1000/i;s/E/*1000*1000*1000*1000/i" | bc)
 if [[ "$wrbps" == "" ]]
 then
   wrbps=0
 fi
 
 # ops
-ops=$(echo $pginfo | sed -n '/pgmap/s/.* \([0-9]*\) op\/s.*/\1/p')
-if [[ "$ops" == "" ]]
+rops=$(echo $clientio | sed -n '/client/s/.* \([0-9]*\) op\/s rd.*/\1/p')
+if [[ "$rops" == "" ]]
 then
-  ops=0
+  rops=0
 fi
+
+wops=$(echo $clientio | sed -n '/client/s/.* \([0-9]*\) op\/s wr.*/\1/p')
+if [[ "$wops" == "" ]]
+then
+  wops=0
+fi
+
+ops=$(echo $rops + $wops | bc)
+
+#ops=$(echo $pginfo | sed -n '/pgmap/s/.* \([0-9]*\) op\/s.*/\1/p')
+#if [[ "$ops" == "" ]]
+#then
+#  ops=0
+#fi
+
 
 # Explode array
 IFS=', ' read -a array <<< "$pgstats"
@@ -199,6 +220,9 @@ function ceph_get()
 {
 # Return the value
 case $1 in
+  health_detail)
+    $ceph_bin health 
+  ;;
   health)
     status=$($ceph_bin health | awk '{print $1}')
     case $status in
@@ -294,6 +318,12 @@ case $1 in
   remapped)
     echo $remapped
   ;;
+   rops)
+    echo $rops
+  ;;
+ wops)
+    echo $wops
+  ;;
   ops)
     echo $ops
   ;;
@@ -308,6 +338,7 @@ case $1 in
 
 function get_kv()
 {
+        echo - ceph.health $(ceph_get health_detail) \\n 
 	echo - ceph.health $(ceph_get health) \\n 
 	echo - ceph.count $(ceph_get count) \\n 
 	echo - ceph.osd_in $(ceph_get in) \\n
@@ -337,7 +368,10 @@ function get_kv()
 	echo - ceph.rados_free $(ceph_get rados_free) \\n
 	echo - ceph.wrbps $(ceph_get wrbps) \\n
 	echo - ceph.rdbps $(ceph_get rdbps) \\n 
-	echo - ceph.ops $(ceph_get ops) 
+	echo - ceph.ops $(ceph_get ops) \\n 
+	echo - ceph.rops $(ceph_get rops) \\n 
+	echo - ceph.wops $(ceph_get wops) 
+	
 }
 echo -e $(get_kv) >/tmp/zabbix_kv.txt 
 $zabbix_sender_bin -vv --zabbix-server $1 --host $2 --input-file /tmp/zabbix_kv.txt >/dev/null 2>&1
