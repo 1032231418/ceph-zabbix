@@ -338,7 +338,7 @@ case $1 in
 
 function get_kv()
 {
-        echo - ceph.health \"$(ceph_get health_detail)\" \\n 
+        echo - ceph.health_detail \"$(ceph_get health_detail)\" \\n 
 	echo - ceph.health $(ceph_get health) \\n 
 	echo - ceph.count $(ceph_get count) \\n 
 	echo - ceph.osd_in $(ceph_get in) \\n
