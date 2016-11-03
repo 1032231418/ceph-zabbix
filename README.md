@@ -6,27 +6,28 @@ Zabbix active plugin for Ceph monitoring
 Installation
 ===========
 
-On Ceph Monitor Hosts:
+A. On one Ceph Monitor Host:
 
-1. excute install cmd:
+1.  git clone https://github.com/BodihTao/ceph-zabbix.git
 
-   sudo sh install.sh 
+2. cd ceph-zabbix
+
+3. sudo cp ceph-status.sh /etc/zabbix/scripts/
    
-2. edit ceph_cron.txt to varify serverActiveIP and ZabbixHost to push
+4. edit ceph_cron.txt to set the serverActiveIP and ZabbixHost to push
 
-3. sudo crontab ceph_cron.txt
+5. sudo crontab ceph_cron.txt
 
-On Zabbix DashBoad:
+On the other Monitor Hosts:
+the same with A step.
+then if one monitor host is down, the ceph-cluser zabbix monitor will work fine.
+
+
+B. On Zabbix DashBoad:
 
 1. import the xml templates.
 
 2. Link the ceph templates to your ZabbixHost
-
-
-
-How to push many MON hosts ceph data to the ZabbixHost?
-
-1. install ceph-zabbix-active on Ceph MON1, MON2, MON3
 
 
 
