@@ -30,7 +30,7 @@ A. On one Ceph Monitor Host:
    
 4. edit ceph_cron.txt to set the serverActiveIP and ZabbixHost to push
 
-5. sudo crontab ceph_cron.txt
+5. sudo cp ceph_cron.txt /etc/cron.d/
 
 On the other Monitor Hosts:
 the same with A step.
