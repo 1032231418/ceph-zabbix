@@ -62,13 +62,13 @@ then
 fi
 
 # ops
-rops=$(echo $clientio | sed -n '/client/s/.* \([0-9]*\) op\/s rd.*/\1/p')
+rops=$(echo $clientio | sed -n '/client/s/.* \([0-9]* k\?\)op\/s rd.*/\1/p'|sed -e "s/K/*1000/ig"|bc)
 if [[ "$rops" == "" ]]
 then
   rops=0
 fi
 
-wops=$(echo $clientio | sed -n '/client/s/.* \([0-9]*\) op\/s wr.*/\1/p')
+wops=$(echo $clientio | sed -n '/client/s/.* \([0-9]* k\?\)op\/s wr.*/\1/p'|sed -e "s/K/*1000/ig"|bc)
 if [[ "$wops" == "" ]]
 then
   wops=0
